@@ -1,0 +1,57 @@
+launch 4 ec2 instances with same security group and key pair
+1st one- default server(10,gp3,http rule add anywhere in edit inbound rules)
+2nd one- redhat-one(select redhat,10,gp3)
+3rd one- ubuntu-server(select ubuntu, 10,gp3)
+4th one- redhat-two(1b)
+
+connect instance one(LInux)
+yum install httpd -y
+cd /var/www/html/
+echo "........">index.html
+ll
+cd
+systemctl start httpd
+systemctl enable httpd
+curl http://localhost
+
+connect 2nd instance(redhat-one)
+dnf install httpd -y
+cd /var/www/html/
+echo ".....">index.html
+ll
+cd
+systemctl start httpd
+systemctl enable httpd
+curl http://localhost
+
+connect 3rd server(ubuntu)
+apt install -y
+apt install apache2 -y
+cd /var/www/html/
+echo ".....">index.html
+ll
+cd
+systemctl start apache2
+curl http://localhost
+
+connect 4th server(redhat-two)
+cat /etc/os-release
+yum install httpd -y
+cd /var/www/html/
+echo ".....">index.html
+ll
+cd
+systemctl start httpd
+systemctl enable httpd
+curl http://localhost
+
+paste the ip addresses of all servers with :80 on edge then youll get the info of servers
+
+to add these servers into group
+goto EC2--->target groups--->create--->choose a target(instances)---->name(target-group)--->next--->select all machines--->register
+
+EC2----->load balancers
+create--->application load balancer--->name(load-balancer)--->ip(ipv4)--->zone(select 1a,b,c,d)--->sec group(existing)--->target group(select the newly created one)--->save
+
+target--->select all--->register pending groups--->register
+paste the dns name on edge gets the output...each timw we refresh we get different server info
