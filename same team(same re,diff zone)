@@ -1,0 +1,35 @@
+same region, different zone(teams one)
+
+
+EC2 launch--->name(server-one)--->key pair(new)--->sg(new)--->subnet(1a)--->10,gp2--->launch
+EC2--->volumes--->give tag name to the existing one(root-vol)--->create volume--->size(5)--->create--->provide name(data-vol) --->actions--->attach(takes some time to load)
+                               --->instance(i....)--->device name(/dev/sdb)--->attach
+
+connect instance                              
+ df -h
+ mkdir /data
+ lsblk
+  mkfs.ext4 /dev/nvme1n1
+  mount /dev/nvme1n1 /data/
+  cd /data/
+  touch shiva.txt{1..100}
+  ll
+
+  launch another instance
+  name(server-two)--->key,sg(existing)--->gp2,10--->subnet(1b)
+  connect server
+
+  EC2--->snapshots---->create--->volume id(data-vol)--->description(this is data-vol snapshot)--->create--->select--->actions--->create vol from snapshot
+                         --->gp2--->1b--->create
+
+  under volumes gets the new volume created
+  provide a name for the available one(name-vol)--->actions--->attach--->instance(i...)--->dev/sdb/--->create
+
+  on 2nd command line
+  df -h
+  lsblk
+  mkdir /shiva
+  mount /dev/nvme1n1 /shiva/
+  cd /shiva/
+  ll
+  gets the 100 files from 1st server
