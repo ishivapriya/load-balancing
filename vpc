@@ -1,0 +1,98 @@
+VPC 
+
+Search VPC on AWS
+-create vpc
+- VPC only
+- name(devops-vpc)
+- IPV4 CIDR 10.0.0.0/16
+- Create
+
+See for IGW Internet Gateway-- 
+  - create IGW--->name(devops-igw)--->create
+
+  create 2 Subnets
+  Subnet--->create--->devops-vpc--->name(public-subnet)--->zone(1a)--->CIDR subnet block(10.0.0.0/24)--->create
+  subnet--->crete--->devops-vpc--->name(private-subnet)--->zone(1b)--->CIDR block(10.0.1.0/24)--->create
+
+  Take duplicate tab
+  EC2--->launch--->name(web-server)--->new-key--->new sg--->network(devops-vpc)--->1a--->enable--->add(http,80,anywhere)--->launch
+  EC2--->launch--->name(db-server)--->key &sg exis--->1b,network(devops-vpc)--->disable--->launch
+
+  goto igw--->select--->actions--->attach--->attach vpc
+  Goto route table
+    create--->name(public-rt)--->vpc--->create--->edit route--->add row--->0.0.0.0/0--->target(igw-)--->save
+            route table--->public-rt--->subnet-association--->public-subnet--->subnet-association--->save
+
+ connect web-server
+  yum install httpd -y
+  rpmquery httpd
+  cd /var/www/html/
+  echo "....">index.html
+  ll            
+ cd
+ systemctl start httpd
+ systemctl enable httpd   
+              
+copy ip of web and paste on google
+      
+ db server
+              click on instance id of db server--->security groups--->sg--->edit inbound-->add-->all icmp ipv4-->save
+
+ on web command line 
+      ping private-ip-address-of-public server
+      ping private-ip-of-private(db)
+              copy the key from key name file(open the key pair file--->ctrl A+ctrl C)
+      vim key-name--->paste
+      ll -d keyname
+      chmod 400 keyname
+      ssh -i keyname ec2-user@db server private ip address  
+              ping google.com
+              error comes
+              goto nat gateways
+              on 1st tab
+              create nat-->name(devops-ngw)-->public-subnet-->type(public)-->allocate ip elastic-->create
+              route tables
+              create-->name(private-subnet)-->devops-vpc-->create-->edit-->add row-->0.0.0.0/0-->nat-->save
+              private-subnet-->subnet-association-->private-->save
+
+
+
+  connection peering
+
+              duplicate tab ohio region
+              create vpc--->prod-web-server--->20.0.0.0/16--->create
+
+              create 2 subnets
+              Sub.name -- prod-web-subnet -- 2a -- 20.0.0.0/24
+              Sub.name -- prod-db-subnet -- 2b -- 20.0.1.0/24
+
+              Create IGW -- prod-IGW
+action -- attach--create
+
+              route table -- prod-public-rt -- Select VPC --save-- edit route -- add route  -- IGW --prod-igw---0.0.0.0/0-- Save
+subnet assosciations -- prod-web-subnet - save
+
+                new tab ohio 
+                instance-->ohio-server(name)--key,sg(create)-2a,enable--http,8-,anywhere
+                security--edit inbound--all icmp ipv4-0.0.0.0/0
+                connect ohio instance
+                hostnamectl set-hostname prod-web.example.com
+                bash
+                ping private ip of virginia(web)
+                ping public ip of web virginia
+
+
+                in both terminals
+                vim /etc/ssh/sshd_config
+                permitroot yes
+                passwordbased authentication yes
+                systemctl start sshd                                         in 2nd restart
+                systemctl enable sshd
+                passwd root
+                redhet,redhat
+                cat >file1.txt                                                cat>file2.txt
+                scp file1.txt root@private ip of ohio(displayed on top):/tmp                             scp file2.txt root@private ip of virginia:/tmp
+                ll
+                
+          
+              
