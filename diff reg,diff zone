@@ -1,0 +1,43 @@
+different regions 
+
+
+EC2 launch--->name(server-one)--->key pair(new)--->sg(new)--->subnet(1a)--->10,gp2--->launch
+EC2--->volumes--->give tag name to the existing one(root-vol)--->create volume--->size(5)--->create--->provide name(data-vol) --->actions--->attach(takes some time to load)
+                               --->instance(i....)--->device name(/dev/sdb)--->attach
+
+connect instance                              
+ df -h
+ mkdir /data
+ lsblk
+  mkfs.ext4 /dev/nvme1n1
+  mount /dev/nvme1n1 /data/
+  cd /data/
+  touch shiva.txt{1..100}
+  ll
+
+
+  EC2--->snapshots---->create--->volume id(data-vol)--->description(this is data-vol snapshot)--->create--->select--->actions--->create vol from snapshot
+                         --->gp2--->1b--->create
+
+  under volumes gets the new volume created
+  provide a name for the available one(name-vol)--->actions--->attach--->instance(i...)--->dev/sdb/--->create
+
+
+take duplicate tab ohio
+  in 1st tab     snapshots--copy snapshots--us-east-2
+goto duplicate tab
+gets the snapshot copied
+select--actions--create vol from snapshot--type(gp2)--instance(2a)--create
+instances--launch--name(prod-server)--key,sg(create)--subnet(2a)--launch
+
+volume--select--attach vol--i...-----dev name(dev/sdb)--create
+connect prod server
+on prod server cmd line
+ lsblk
+mkdir /prod-data
+mount /dev/nvme1n1 /prod-data/
+cd /prod-data/
+ll
+
+
+  
