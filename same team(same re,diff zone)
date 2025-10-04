@@ -1,35 +1,15 @@
-same region, different zone(teams one)
-
-
-EC2 launch--->name(server-one)--->key pair(new)--->sg(new)--->subnet(1a)--->10,gp2--->launch
-EC2--->volumes--->give tag name to the existing one(root-vol)--->create volume--->size(5)--->create--->provide name(data-vol) --->actions--->attach(takes some time to load)
-                               --->instance(i....)--->device name(/dev/sdb)--->attach
-
-connect instance                              
- df -h
- mkdir /data
- lsblk
-  mkfs.ext4 /dev/nvme1n1
-  mount /dev/nvme1n1 /data/
-  cd /data/
-  touch shiva.txt{1..100}
-  ll
-
-  launch another instance
-  name(server-two)--->key,sg(existing)--->gp2,10--->subnet(1b)
-  connect server
-
-  EC2--->snapshots---->create--->volume id(data-vol)--->description(this is data-vol snapshot)--->create--->select--->actions--->create vol from snapshot
-                         --->gp2--->1b--->create
-
-  under volumes gets the new volume created
-  provide a name for the available one(name-vol)--->actions--->attach--->instance(i...)--->dev/sdb/--->create
-
-  on 2nd command line
-  df -h
-  lsblk
-  mkdir /shiva
-  mount /dev/nvme1n1 /shiva/
-  cd /shiva/
-  ll
-  gets the 100 files from 1st server
+create a instance 1a,,new key,,new sec group add nfs port 2049
+create another 1b,existing
+connect to terminal both
+rpmquery nfs-utils
+mkdir /data
+create duplicate tab
+eps search
+create file sysname it 
+bottom there will be network --manage---and change sec our our and remove remaining
+save and attach 
+mount via DNS
+copy second link and paste in both terminals
+with our file
+touch data.txt{1..5}
+ll
