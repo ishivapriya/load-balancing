@@ -1,0 +1,10 @@
+steps: 
+1) Search CloudFormation
+2) Add the above content in a file with extension .yml
+3) upload this file 
+4) Will ask for key pair to choose -- Either choose an existing key or create a new key from EC2 Dashboard -- Key Pair Tab and then  choose this new key
+5) Create Stack
+ 
+An instance will be created in the EC2 instances section. 
+By default SSH will not be enabled, go to the security groups -> Edit inbound rules -> Add SSH 
+ 
