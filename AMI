@@ -1,0 +1,29 @@
+launch instance-dev-server
+keypair-new
+n/w settings-1a
+sec group-devops-sg
+inbound rules--add http
+size-10,gp2
+sudo su -
+hostnamectl st-hostname dev-server.example.com
+bash
+cat /etc/os-release
+ip a s
+yum install httpd -y
+cd /var/www/html
+echo "this is my webserver" >index.html
+ll
+cat index.html
+cd
+systemctl start httpd
+systemctl enable httpd
+public ip and port num in browser--prompt will be displayed
+
+goto ec2 instance-->select-->actions--image and templates----create image--name-devops-img
+desc:this is our custom img-untick on reboot instance
+tag keyname--value--devops-image
+
+left side AMI'S-click-status of img created
+click on created image--actions--copy ami--ohio server
+goto ohio server---ami--launch instance from ami---
+copy the ip of instance and paste it  on edge:80
